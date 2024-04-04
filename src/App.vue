@@ -28,7 +28,7 @@ export default {
   },
 
   mounted() {
-    document.title = "Glover - Best online Market"
+    document.title = "ASKNC - Everything you need delivered now"
   },
   computed: {
     loading() {
