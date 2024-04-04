@@ -35,7 +35,7 @@
                       name: 'VendorHome',
                       params: {
                         id: vendor.id,
-                        slug: vendor.name ? sanitizeTitle(vendor.name) : sanitizeTitle(vendor.slug),
+                        slug: sanitizeTitle(`${vendor.slug}`),
                       },
                     }).href
                   "

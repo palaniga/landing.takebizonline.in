@@ -78,6 +78,7 @@
               class="text-gray-500"
               :href="
                 $router.resolve({
+                  name: 'VendorHome',
                   params: {
                     id: vendor.id,
                     slug: sanitizeTitle(`${vendor.slug}`),
