@@ -4,6 +4,7 @@
 
     <div class="container mx-auto max-w-7xl">
       <select
+      v-if="false"
         v-model="selectedLanguage"
         class="w-16 px-3 m-2 text-black bg-transparent rounded-md"
       >
