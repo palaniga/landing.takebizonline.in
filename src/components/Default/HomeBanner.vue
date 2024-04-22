@@ -18,6 +18,7 @@
         </option>
       </select>
       <div class="flex flex-col items-center justify-center p-8">
+        <br /><br />
         <h1
           class="mt-5 text-3xl font-bold text-center text-black"
           v-text="$t('landingpageHeader')"
@@ -27,7 +28,7 @@
         </p>
         <div
           class="flex items-center justify-between p-1 mt-4 bg-white rounded-full md:w-5/12"
-          v-if="settings"
+          v-if="settings && false"
         >
           <input
             class="w-full p-2 border-none rounded-full placeholder:font-light placeholder:text-sm"
@@ -43,6 +44,7 @@
             <img src="/img/icons/search.svg" class="w-6" alt="" />
           </div>
         </div>
+        <br /><br />
       </div>
     </div>
   </div>

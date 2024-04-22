@@ -16,7 +16,7 @@
             }}</span>
           </a>
         </div>
-        <div class="flex items-center justify-center">
+        <div v-if="false" class="flex items-center justify-center">
           <div
             class="content-center hidden px-5 py-3 rounded-md sm:block sm:ml-6"
           >
@@ -51,6 +51,25 @@
         <div
           class="absolute inset-y-0 right-0 flex items-center pr-1 sm:static sm:inset-auto sm:ml-6 sm:pr-0"
         >
+          <div
+            class="flex items-center justify-between p-1 my-2 bg-blue-50 rounded-full border"
+            v-if="settings"
+            :style="{ 'width': '25rem' }"
+          >
+            <input
+              class="w-full p-2 border-none rounded-full placeholder:font-light placeholder:text-sm"
+              v-model="search"
+              type="text"
+              placeholder="search a product or vendor"
+            />
+            <div
+              @click="getSearchResult"
+              class="flex items-center p-2 rounded-full cursor-pointer"
+              :style="{ 'background-color': settings.colors.primaryColor }"
+            >
+              <img src="/img/icons/search.svg" class="w-6" alt="" />
+            </div>
+          </div>
           <div class="hidden md:mx-2 md:block">
             <a href="/search" class="p-2 text-black">
               <span class="sr-only">Search</span>
@@ -357,6 +376,9 @@ export default {
   },
 
   methods: {
+    getSearchResult() {
+      this.$router.push({ name: "DefaultSearch", params: { slug: this.search } });
+    },
     logout() {
       localStorage.removeItem("authToken");
       localStorage.removeItem("phone");
