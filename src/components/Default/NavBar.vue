@@ -6,6 +6,7 @@
     as="nav"
     class="sticky inset-x-0 top-0 left-0 z-50 w-full py-2 bg-white border-b border-gray-200 md:py-0"
   >
+  
     <div class="container mx-auto max-w-7xl">
       <div class="flex items-center justify-between">
         <div class="flex items-center flex-shrink-0">
@@ -349,7 +350,8 @@ export default {
     this.$store.dispatch("fetchSettings").then(() => {
       this.settings = this.$store.state.settings;
       // let mapKey = this.settings.strings.google_maps_key
-      // console.log(this.settings)
+      console.log("this.settings")
+      console.log(process.env);
     });
 
     if (localStorage.getItem("authToken")) {
