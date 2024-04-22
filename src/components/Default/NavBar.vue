@@ -350,8 +350,7 @@ export default {
     this.$store.dispatch("fetchSettings").then(() => {
       this.settings = this.$store.state.settings;
       // let mapKey = this.settings.strings.google_maps_key
-      console.log("this.settings")
-      console.log(process.env);
+      // console.log(this.settings)
     });
 
     if (localStorage.getItem("authToken")) {
