@@ -108,7 +108,7 @@
                                         </svg>
                                     </button>
                                 </div>
-                                <span v-if="product.discount_price > 0" class="flex mt-3 space-x-2">
+                                <span v-if="product.discount_price > 0 && false" class="flex mt-3 space-x-2">
 
                                     <p class="block mb-4 text-2xl font-black text-green-500">{{ currency }}{{
                                         product.discount_price.toFixed(2)
@@ -322,7 +322,7 @@
                     <div>
                         <p class="text-2xl text-gray-700 md:hidden">{{ truncate(product.name, 25) }}</p>
                         <p class="hidden text-2xl text-gray-700 md:flex">{{ product.name }}</p>
-                        <span v-if="product.discount_price > 0">
+                        <span v-if="product.discount_price > 0 && false">
                             <p class="mt-2 text-2xl tracking-wide">{{ currency }}{{
                                 product.discount_price.toFixed(2)
                             }}</p>
@@ -517,7 +517,7 @@ export default {
         totalPrice() {
 
             let total
-            if (this.product.discount_price != 0) {
+            if (this.product.discount_price != 0 & false) {
                 total = Number(this.quantity) * Number(this.product.discount_price)
             }
             else {
@@ -651,7 +651,7 @@ export default {
                 });
             } else {
                 this.quantity++;
-                if (product.discount_price != 0) {
+                if (product.discount_price != 0 & false) {
                     this.totalPrice = product.discount_price + this.quantity;
                 } else {
                     this.totalPrice = product.price + this.quantity;

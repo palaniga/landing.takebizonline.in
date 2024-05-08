@@ -45,7 +45,7 @@
                                             <h3 class="text-xs font-medium text-gray-500">{{ truncate(product.name, 20) }}
                                             </h3>
                                             <!-- <h1 class="text-sm font-medium">{{ currency }}{{ product.price }}</h1> -->
-                                            <span v-if="product.discount_price > 0">
+                                            <span v-if="product.discount_price > 0 & false">
                                                 <p class="text-sm font-medium ">{{ currency }}{{
                                                     product.discount_price.toFixed(2)
                                                 }}</p>
@@ -232,7 +232,7 @@ export default {
 
             } else {
                 product.quantity++
-                if (product.discount_price != 0) {
+                if (product.discount_price != 0 & false) {
                     product.totalPrice = product.discount_price * product.quantity
                     // this.finalTotal = product.totalPrice
                 } else {
@@ -259,7 +259,7 @@ export default {
             if (product.quantity > 1) {
                 product.quantity--
                 // reduce quantity by the price of the product
-                if (product.discount_price != 0) {
+                if (product.discount_price != 0 & false) {
                     product.totalPrice = product.discount_price * product.quantity;
                 } else {
                     product.totalPrice = product.price * product.quantity;

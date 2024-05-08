@@ -15,7 +15,7 @@
                             <div class="md:flex md:space-x-2 md:justify-between">
                                 <h3 class="text-sm">{{ truncate(product.name, 60) }}</h3>
                                 <div>
-                                    <span v-if="product.discount_price > 0">
+                                    <span v-if="product.discount_price > 0 & false">
                                         <p class="text-sm tracking-wide ">{{ currency }}{{ product.discount_price.toFixed(2)
                                         }}</p>
                                         <p class="text-xs tracking-wide ">{{ currency }}<span class="line-through">{{
@@ -318,7 +318,7 @@ export default {
 
             } else {
                 product.quantity++
-                if (product.discount_price != 0) {
+                if (product.discount_price != 0 & false) {
                     product.totalPrice = product.discount_price * product.quantity
                     // this.finalTotal = product.totalPrice
                 } else {
@@ -345,7 +345,7 @@ export default {
             if (product.quantity > 1) {
                 product.quantity--
                 // reduce quantity by the price of the product
-                if (product.discount_price != 0) {
+                if (product.discount_price != 0 & false) {
                     product.totalPrice = product.discount_price * product.quantity;
                 } else {
                     product.totalPrice = product.price * product.quantity;

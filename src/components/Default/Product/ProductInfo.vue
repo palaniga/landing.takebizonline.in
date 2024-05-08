@@ -165,11 +165,12 @@ export default {
         });
       } else {
         this.quantity++;
-        if (productinfo.discount_price != 0) {
-          this.totalPrice = productinfo.discount_price + this.quantity;
-        } else {
-          this.totalPrice = productinfo.price + this.quantity;
-        }
+        // if (productinfo.discount_price != 0) {
+        //   this.totalPrice = productinfo.discount_price + this.quantity;
+        // } else {
+        //   this.totalPrice = productinfo.price + this.quantity;
+        // }
+        this.totalPrice = productinfo.price + this.quantity;
       }
     },
 
