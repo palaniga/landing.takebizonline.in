@@ -15,7 +15,12 @@
                     </span>
 
                 </div>
-                <p class="font-medium">{{ currency }}{{ product.price.toFixed(2) }}</p>
+                <div v-if="product.discount_price > 0">
+                    <p class="font-medium">{{ currency }}{{product.discount_price.toFixed(2)}} <span class="text-xs ">{{ currency }}<span class="line-through">{{product.price.toFixed(2)}}</span></span></p>
+                </div>
+                <div v-else>
+                    <p>{{ currency }}{{ product.price.toFixed(2) }}</p>
+                </div>
                 <router-link
                     :to="{ name: 'DefaultVendor', params: { id: product.vendor.id, slug: sanitizeTitle(product.vendor.name) } }"
                     class="text-xs text-gray-500 underline ">{{ product.vendor.name }}</router-link>
