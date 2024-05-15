@@ -14,7 +14,7 @@
                         </div>
                         <div class="mt-2">
                             <p class="font-medium md:w-96 ">{{ item.product.name }}</p>
-                            <p class="font-medium " v-if="item.product.discount_price && false">{{ currency }}{{
+                            <p class="font-medium " v-if="item.product.discount_price">{{ currency }}{{
                                 item.product.discount_price.toFixed(2) }}</p>
                             <p class="font-medium " v-else>{{ currency }}{{ item.product.price.toFixed(2) }}</p>
                             <p class="text-sm text-gray-500 w-96">{{ item.description }}</p>

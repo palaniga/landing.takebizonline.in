@@ -14,6 +14,7 @@ export default createStore({
     serviceCart: serviceCart ? JSON.parse(serviceCart) : [],
     loading: false,
     baseUrl: "https://dev.asknc.in/",
+    // baseUrl: "https://fuodz.edentech.online/",
     settings: null,
   },
 
@@ -37,10 +38,9 @@ export default createStore({
         item.selectedOption = selectedOption;
         item.selectedOptions = selectedOptions;
         // item.totalPrice = item.quantity * item.price;
-        // if (item.discount_price != 0) {
-        //   item.totalPrice = item.quantity * item.discount_price;
-        // } else
-        if (item.quantity) {
+        if (item.discount_price != 0) {
+          item.totalPrice = item.quantity * item.discount_price;
+        } else if (item.quantity) {
           item.totalPrice = item.quantity * item.price;
         } else {
           item.totalPrice = item.price;
@@ -70,10 +70,9 @@ export default createStore({
         product.selectedOption = selectedOption;
         product.selectedOptions = selectedOptions;
         // product.totalPrice = product.quantity * product.price
-        // if (product.discount_price != 0) {
-        //   product.totalPrice = product.quantity * product.discount_price;
-        // } else
-        if (product.quantity) {
+        if (product.discount_price != 0) {
+          product.totalPrice = product.quantity * product.discount_price;
+        } else if (product.quantity) {
           product.totalPrice = product.quantity * product.price;
         } else {
           product.totalPrice = product.price;

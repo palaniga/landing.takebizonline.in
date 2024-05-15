@@ -19,7 +19,7 @@
                             <div class="md:flex md:space-x-2 md:justify-between">
                                 <h3 class="text-sm">{{ truncate(product.product.name, 60) }}</h3>
                                 <div>
-                                    <span v-if="product.product.discount_price > 0 & false">
+                                    <span v-if="product.product.discount_price > 0">
                                         <p class="text-sm tracking-wide ">{{ currency }}{{
                                             product.product.discount_price.toFixed(2)
                                         }}</p>
@@ -180,7 +180,7 @@ export default {
                     productQunty = product.quantity - 1;
                 }
                 this.quantity = productQunty
-                if (product.discount_price != 0 & false) {
+                if (product.discount_price != 0) {
                     this.totalPrice = product.discount_price + this.quantity;
                 } else {
                     this.totalPrice = product.price + this.quantity;
