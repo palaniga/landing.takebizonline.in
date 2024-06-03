@@ -96,6 +96,7 @@ export default {
 
     methods: {
         countryChanged(country) {
+            this.details.phone = "";
             this.country = country.iso2;
             this.code = country.dialCode;
         },
@@ -108,9 +109,11 @@ export default {
 
         async register() {
             if (this.checked) {
-
-                this.phoneNumber = '+' + this.code + parseInt(this.details.phone, 10);
-
+                
+                if(this.details.phone.substring(0,this.code.length+1) != '+' + this.code){
+                    this.phoneNumber = '+' + this.code + parseInt(this.details.phone, 10);
+                }
+                
                 this.details.country_code = this.country;
                 this.details.phone = this.phoneNumber;
                 await axios
