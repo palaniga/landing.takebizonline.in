@@ -13,8 +13,9 @@ export default createStore({
     cart: cart ? JSON.parse(cart) : [],
     serviceCart: serviceCart ? JSON.parse(serviceCart) : [],
     loading: false,
-    baseUrl: "https://dev.asknc.in/",
-    // baseUrl: "https://fuodz.edentech.online/",
+    baseUrl: "https://portal.asknc.in/",
+    // baseUrl: "https://dev.asknc.in/",
+    // baseUrl: "http://localhost:8000/",
     settings: null,
   },
 
