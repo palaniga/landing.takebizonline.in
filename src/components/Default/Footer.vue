@@ -36,6 +36,12 @@
             :href="`${this.$store.state.baseUrl}pages/terms`"
             >{{ $t('footer.sub3') }}</a
           >
+          <a
+            class="mb-3 text-sm font-light text-gray-500"
+            target="__blank"
+            :href="`${this.$store.state.baseUrl}cms/refund-policy`"
+            >{{ $t('footer.refund-policy') }}</a
+          >
         </div>
       </div>
       <div class="flex flex-col mt-3 md:mt-0 md:items-center md:w-52">
@@ -78,7 +84,6 @@
               class="text-gray-500"
               :href="
                 $router.resolve({
-                  name: 'VendorHome',
                   params: {
                     id: vendor.id,
                     slug: sanitizeTitle(`${vendor.slug}`),
@@ -120,7 +125,6 @@
         ><img src="/img/icons/twitter.png" class="w-4 h-4" alt=""
       /></a>
     </div>
-    <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700">
   </div>
 </template>
 <script>
