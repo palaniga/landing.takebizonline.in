@@ -137,7 +137,7 @@
         <div class="flex justify-between mt-1">
           <p class="font-light text-gray-500">{{ $t('cart.coupon') }}</p>
           <p class="font-bold text-gray-500">
-            {{ currency }}{{ tax ? tax : "0.00" }}
+            {{ currency }}{{ discount ? discount : "0.00" }}
           </p>
         </div>
         <div class="flex justify-between mt-1">
@@ -153,7 +153,7 @@
         <div class="flex justify-between my-1">
           <p class="font-light text-gray-500">{{ $t('cart.total') }}:</p>
           <p class="font-bold text-gray-500">
-            {{ currency }}{{ newTotal ? newTotal.toFixed(2) : "0.00" }}
+            {{ currency }}{{ viewTotal ? viewTotal.toFixed(2) : "0.00" }}
           </p>
         </div>
         <router-link :style="{ 'background-color': settings.colors.primaryColor }" @click="checkoutOrder" to="/checkout"
@@ -256,7 +256,7 @@ export default {
       methods: null,
       tax: 0,
       taxAmt: 0,
-      discount: null,
+      discount: (localStorage.getItem('discountAmount')) ? localStorage.getItem('discountAmount')  : null,
       vendor_pickup: null,
       delivery_amount: 0,
       showAddress: true,
@@ -270,6 +270,7 @@ export default {
       vat: 0,
       service_fee: 0,
       newTotal: 0,
+      viewTotal: 0,
     };
   },
   mounted() {
@@ -315,13 +316,14 @@ export default {
     for (let product of this.products) {
       this.newTotal += Number(product.totalPrice)
       // if(this.product.vat != null || this.service_fee != null){
-      //   this.vat = this.product.vat
-      //   this.service_fee = this.product.service_fee
-      //   this.newTotal += Number(product.totalPrice) + Number(this.product.vat) + Number(this.service_fee);
-      // }
-
-      let taxAmt = (Number(this.newTotal) * Number(product.vendor.tax)) / 100;
-      this.tax = parseFloat(taxAmt).toFixed(2);
+        //   this.vat = this.product.vat
+        //   this.service_fee = this.product.service_fee
+        //   this.newTotal += Number(product.totalPrice) + Number(this.product.vat) + Number(this.service_fee);
+        // }
+        
+        // let taxAmt = (Number(this.newTotal) * Number(product.vendor.tax)) / 100;
+      let taxAmt = (Number(product.totalPrice) * Number(product.vendor.tax)) / 100;
+      this.tax += taxAmt;
       if (product.selectedOptions) {
         product.selectedOptions.forEach((item) => {
           this.newTotal += Number(item.price);
@@ -332,6 +334,14 @@ export default {
       }
     }
 
+    this.viewTotal = this.newTotal
+    this.viewTotal += this.tax;
+    // this.tax = parseFloat(this.tax).toFixed(2);
+    
+    if(this.discount>0){
+      this.viewTotal -= this.discount
+    }
+    
     // console.log(this.getTotal)
   },
 
@@ -355,7 +365,7 @@ export default {
           let service_fee = this.product.service_fee
           this.newTotal += Number(product.totalPrice) + Number(vat) + Number(service_fee);
           let taxAmt = (Number(this.newTotal) * Number(product.vendor.tax)) / 100;
-          this.tax = parseFloat(taxAmt).toFixed(2);
+          this.tax += taxAmt;
           if (product.selectedOptions) {
             product.selectedOptions.forEach((item) => {
               this.newTotal += Number(item.price);
@@ -366,6 +376,7 @@ export default {
           }
           return this.newTotal
         }
+        this.tax += parseFloat(this.tax).toFixed(2);
       }
 
     },
@@ -501,13 +512,14 @@ export default {
         });
       } else {
 
-        let totalAmount = this.newTotal + this.delivery_amount;
+        let totalAmount = this.newTotal + this.delivery_amount + this.tax - (this.discount ?? 0);
         let mProduct = []
-        let vVendor_id, vFees, vTax, vDiscount;
+        let vVendor_id, vFees;
+        // let vVendor_id, vFees, vTax, vDiscount;
         this.products.forEach((product) => {
           vVendor_id = product.vendor.id,
-            vTax = product.vendor.tax,
-            vDiscount = product.discount_price,
+            // vTax = product.vendor.tax,
+            // vDiscount = product.discount_price,
             vFees = [
               {
                 id: product.vendor.fee ? product.vendor.fee.id : '',
@@ -517,7 +529,7 @@ export default {
             ];
           mProduct.push({
             selected_qty: product.quantity,
-            price: product.price,
+            price: (product.discount_price<=0)?product.price:product.discount_price,
             product: {
               id: product.id,
               name: product.name,
@@ -550,8 +562,10 @@ export default {
               vendor_id: vVendor_id,
               fees: vFees,
               sub_total: this.newTotal,
-              tax: vTax ?? 0,
-              discount: vDiscount ?? 0,
+              tax: this.tax ?? 0,
+              // tax: vTax ?? 0,
+              discount: this.discount ?? 0,
+              // discount: vDiscount ?? 0,
               delivery_address_id: this.address ? this.address.id : "",
               payment_method_id: this.paymentMethod.id,
               delivery_fee: this.delivery_fee,
@@ -566,6 +580,8 @@ export default {
           )
           .then((response) => {
             localStorage.removeItem("cart");
+            localStorage.removeItem("appliedCoupon");
+            localStorage.removeItem("discountAmount");
             if (this.paymentMethod.is_cash == 1) {
               Swal.fire({
                 title: "Order Successful",
@@ -591,6 +607,7 @@ export default {
                 title: "Order Checkout",
                 text: response.data.message,
               });
+
               window.location.href = response.data.link;
             }
           })

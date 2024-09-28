@@ -15,7 +15,7 @@
                     <a href="##"
                         class="flow-root px-2 py-2 transition duration-150 ease-in-out rounded-md hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
                         <span class="flex items-center">
-                            <span class="text-sm font-light text-gray-500">
+                            <span class="text-sm font-light text-gray-500 w-full">
                                 Subtotal
                             </span>
                             <p class="text-sm font-medium text-gray-900">{{ currency }}{{ finalTotal.toFixed(2) }}</p>
@@ -23,7 +23,7 @@
                         <span class="flex flex-row space-x-5">
                             <a :style="{ 'background-color': settings.colors.primaryColorDark }" href="/cart"
                                 class="flex items-center justify-center w-full h-10 p-2 mt-5 text-sm font-light text-white border border-gray-200 rounded-full cursor-pointer">
-                                View my cart (3)
+                                View my cart ({{ cartItemCount }})
                             </a>
                             <a href="/checkout"
                             :style="{ 'background-color': settings.colors.primaryColor }"
@@ -40,7 +40,7 @@
                                 <div class="flex flex-row space-x-2">
                                     <img v-if="product.photo" v-bind:src="product.photo" class="w-24 h-20 rounded-md "
                                         alt="">
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col w-full">
                                         <div class="flex justify-between">
                                             <h3 class="text-xs font-medium text-gray-500">{{ truncate(product.name, 20) }}
                                             </h3>
@@ -79,7 +79,7 @@
                                                 </div>
                                             </div>
                                             <button
-                                                class="flex items-center justify-center h-5 px-2 rounded-full bg-gray-50"
+                                                class="flex items-center justify-center h-5 px-2 rounded-full bg-red-50"
                                                 @click="removeProduct(product.id)">
                                                 <img src="/img/icons/delete.svg" class="w-3 h-3" alt="">
                                                 <p class="ml-1 text-xs font-light">Remove</p>

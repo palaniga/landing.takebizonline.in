@@ -71,8 +71,9 @@
                     <div class="flex items-center justify-between w-full p-1 mt-4 bg-white rounded-lg">
                         <input class="w-full p-2 border-none rounded-lg placeholder:font-light placeholder:text-sm"
                             v-model="coupon" type="text" placeholder="Enter discount code" />
-                        <button @click="getCoupon" class="flex items-center p-2 bg-gray-200 rounded-lg cursor-pointer">
-                            <img src="/img/icons/chevron_right.svg" class="w-6" alt="">
+                        <button @click="clickCoupon" class="flex items-center p-2 bg-gray-200 rounded-lg cursor-pointer">
+                            <img src="/img/icons/minus.png" v-if="this.appliedCoupon" class="w-6" alt="">
+                            <img src="/img/icons/chevron_right.svg" v-if="!this.appliedCoupon" class="w-6" alt="">
                             <!-- <SearchIcon class="self-center w-6 h-6 font-black text-black md:w-6 md:h-6" aria-hidden="true" /> -->
                         </button>
                     </div>
@@ -168,7 +169,8 @@ export default {
             product: null,
             currency: null,
             quantity: 1,
-            coupon: null,
+            coupon: (localStorage.getItem("appliedCoupon")) ? localStorage.getItem("appliedCoupon") : null,
+            appliedCoupon: (localStorage.getItem("appliedCoupon")) ? true : false,
             discount: null,
             discountAmount: null,
             AuthStr: "Bearer " + localStorage.getItem("authToken"),
@@ -197,6 +199,12 @@ export default {
             this.$store.commit('loading', false)
             // console.log(this.products)
         }
+        
+        if (localStorage.getItem("appliedCoupon")) {
+            alert("Coupon On");
+            this.coupon = localStorage.getItem("appliedCoupon");
+            this.getCoupon();
+        }
 
         this.finalTotal = this.totalAmt()
     },
@@ -220,8 +228,10 @@ export default {
             })
                 .then((response) => {
                     // this.$store.commit('loading', false)
-                    this.discount = response.data
-                    console.log(response)
+                    this.discount = response.data;
+                    this.appliedCoupon = response.data.code;
+                    localStorage.setItem("appliedCoupon", response.data.code);
+                    this.finalTotal = this.totalAmt()
                 })
                 .catch((error) => {
                     this.$store.commit('loading', false)
@@ -232,6 +242,20 @@ export default {
                     })
                 })
 
+        },
+
+        clickCoupon() {
+            if (this.appliedCoupon) {
+                this.coupon = null;
+                this.appliedCoupon = null;
+                this.discount = null;
+                this.discountAmount = 0;
+                localStorage.removeItem("appliedCoupon");
+                localStorage.removeItem("discountAmount");
+                this.finalTotal = this.totalAmt();
+            } else {
+                this.getCoupon();
+            }
         },
 
         back() {
@@ -280,10 +304,21 @@ export default {
             this.total = this.cartSubTotal();
             if (this.discount) {
                 if (this.discount.expired == false) {
-                    this.discount.products.forEach((item) => {
+                    if((this.discount.products.length > 0) || (this.discount.vendors.length > 0)){
+                        let isCouponApplied = false;
                         const cartItems = JSON.parse(localStorage.getItem("cart"));
-                        const index = cartItems.findIndex(({ id }) => id === item.id);
-                        if (cartItems[index]) {
+                        
+                        this.discount.products.forEach((item) => {
+                            const index = cartItems.findIndex(({ id }) => id === item.id);
+                            if(index) isCouponApplied = true;
+                        });
+                        
+                        this.discount.vendors.forEach((item) => {
+                            const index = cartItems.findIndex(({ vendor_id }) => vendor_id === item.vendor_id);
+                            if(index) isCouponApplied = true;
+                        });
+
+                        if(isCouponApplied){
                             if (this.discount.percentage == 1) {
                                 this.discountAmount = this.discount.discount
                                 this.total = this.total - (this.total * (this.discount.discount / 100));
@@ -291,14 +326,17 @@ export default {
                                 this.discountAmount = this.discount.discount
                                 this.total -= this.discount.discount;
                             }
-                            cartItems[index].totalPrice = this.total
-                            cartItems[index].discount = this.discountAmount
-                            localStorage.setItem("cart", JSON.stringify(cartItems));
-
-                            // localStorage.addItem("discount", this.discount)
-                            // localStorage.getItem()
+                            // cartItems[index].totalPrice = this.total
+                            // cartItems[index].discount = this.discountAmount
+                            localStorage.setItem("discountAmount", this.discountAmount);
                         }
-                    })
+                    } else {
+                        notify({
+                            type: "error",
+                            title: "Cart",
+                            text: "This coupon not applicable for this product",
+                        });
+                    }
 
                 }
             }

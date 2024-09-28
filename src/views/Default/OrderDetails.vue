@@ -329,6 +329,11 @@
                                 <p class="text-sm">Shipping</p>
                                 <p class="text-sm font-medium">{{ currency }}{{ order.delivery_fee }}</p>
                             </div>
+                            <hr v-if="order.discount>0">
+                            <div class="flex justify-between my-2" v-if="order.discount>0">
+                                <p class="text-sm">Discount</p>
+                                <p class="text-sm font-medium">- {{ currency }}{{ order.discount }}</p>
+                            </div>
                             <hr>
                             <div class="flex justify-between my-2">
                                 <p class="text-sm">Tax</p>
