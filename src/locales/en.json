@@ -141,6 +141,7 @@
   "pickupOrder": "Pickup Order",
   "pharmacyIndicate": "Please indicate whether you will pickup order from the vendor",
   "selectAddress": "Please select delivery address",
+  "selectTip": "Driver tip",
   "paymentMethods": "Payment Methods",
   "placeOrderRequest": "Place Order Request",
   "deliveryAddress": "Delivery Address",
@@ -213,6 +214,7 @@
     "proceedToChceckout": "Proceed to checkout",
     "acceptedPayment": " We accept the following payment options",
     "deliveryFee": "Delivery Fee",
+    "subtotal": "Subtotal",
     "tax": "Tax",
     "driverTip": "Driver Tip",
     "placeOrder": "Place Order"

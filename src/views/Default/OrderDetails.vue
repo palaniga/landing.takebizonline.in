@@ -316,13 +316,13 @@
                         </div>
                         <div class="mt-2 md:w-96">
                             <div class="flex justify-between my-2">
-                                <p class="text-sm">Tip</p>
-                                <p class="text-sm font-medium">{{ currency }}{{ order.tip }}</p>
+                                <p class="text-sm">Subtotal</p>
+                                <p class="text-sm font-medium">{{ currency }}{{ order.sub_total }}</p>
                             </div>
                             <hr>
                             <div class="flex justify-between my-2">
-                                <p class="text-sm">Subtotal</p>
-                                <p class="text-sm font-medium">{{ currency }}{{ order.sub_total }}</p>
+                                <p class="text-sm">Tip</p>
+                                <p class="text-sm font-medium">{{ currency }}{{ order.tip }}</p>
                             </div>
                             <hr>
                             <div class="flex justify-between my-2">

@@ -96,10 +96,17 @@
           </div>
         </div> -->
         <div class="flex flex-col justify-start mb-5 tems-start">
-          <input type="number" placeholder="Tip driver" v-model="tip"
-            class="block w-full h-12 px-2 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+          <select id="tip" name="tip" v-model="tip"
+            class="block w-full h-12 px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            <option :value="0"> {{ $t('selectTip') }}</option>
+            <option v-for="tip in [10,20,30,40,50]" :value="tip" v-bind:key="tip">
+              {{ tip }}
+            </option>
+          </select>
+          <!-- <input type="number" placeholder="Tip driver" v-model="tip"
+            class="block w-full h-12 px-2 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" min="0"/> -->
           <textarea id="note" name="note" placeholder="Note" v-model="note" rows="3"
-            class="block w-full p-3 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+            class="block w-full p-3 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" ></textarea>
         </div>
         <div class="flex flex-col" v-for="product in products" :key="product.id">
           <div class="flex justify-between" v-if="product.selectedOption">
@@ -127,30 +134,39 @@
             </p>
           </div>
         </div>
+        <hr class="mt-2" />
+        <div class="flex justify-between mt-1">
+          <p class="font-light text-gray-500">{{ $t('checkout.subtotal') }}</p>
+          <p class="font-bold text-gray-500">
+            {{ currency
+              }}{{ newTotal ? newTotal.toFixed(2) : "0.00" }}
+          </p>
+        </div>
         <div class="flex justify-between mt-1">
           <p class="font-light text-gray-500">{{ $t('checkout.deliveryFee') }}</p>
           <p class="font-bold text-gray-500">
             {{ currency
-            }}{{ delivery_amount ? delivery_amount.toFixed(2) : "0.00" }}
+              }}{{ delivery_amount ? delivery_amount.toFixed(2) : "0.00" }}
           </p>
         </div>
         <div class="flex justify-between mt-1">
           <p class="font-light text-gray-500">{{ $t('cart.coupon') }}</p>
           <p class="font-bold text-gray-500">
-            {{ currency }}{{ discount ? discount : "0.00" }}
+            {{ currency }}{{ discount ? parseFloat(discount).toFixed(2) : "0.00" }}
           </p>
         </div>
-        <div class="flex justify-between mt-1">
+        <div class="flex justify-between mt-1 mb-2">
           <p class="font-light text-gray-500">{{ $t('checkout.tax') }}</p>
           <p class="font-bold text-gray-500">
-            {{ currency }}{{ tax ? tax : "0.00" }}
+            {{ currency }}{{ tax ? tax.toFixed(2) : "0.00" }}
           </p>
         </div>
-        <div class="flex justify-between mt-1" v-if="tip != null">
+        <div class="flex justify-between my-1" v-if="tip>0">
           <p class="font-light text-gray-500">{{ $t('checkout.driverTip') }}</p>
-          <p class="font-bold text-gray-500">{{ currency }}{{ tip }}</p>
+          <p class="font-bold text-gray-500">{{ currency }}{{ tip.toFixed(2) }}</p>
         </div>
-        <div class="flex justify-between my-1">
+        <hr />
+        <div class="flex justify-between my-3">
           <p class="font-light text-gray-500">{{ $t('cart.total') }}:</p>
           <p class="font-bold text-gray-500">
             {{ currency }}{{ viewTotal ? viewTotal.toFixed(2) : "0.00" }}
@@ -248,7 +264,7 @@ export default {
       showModal: false,
       isLoggedIn: false,
       user: null,
-      tip: null,
+      tip: 0,
       note: null,
       products: null,
       addresses: null,
@@ -334,13 +350,8 @@ export default {
       }
     }
 
-    this.viewTotal = this.newTotal
-    this.viewTotal += this.tax;
+    this.viewTotal = this.newTotal + this.tax + this.tip + this.delivery_amount - this.discount;
     // this.tax = parseFloat(this.tax).toFixed(2);
-    
-    if(this.discount>0){
-      this.viewTotal -= this.discount
-    }
     
     // console.log(this.getTotal)
   },
@@ -349,37 +360,27 @@ export default {
     delivery_amount(newAmount) {
       // newAmount = this.delivery_amount
       // Update the total whenever the amount changes
-      this.newTotal = this.newTotal + newAmount;
+      // this.newTotal += newAmount;
+      let tips = this.tip;
+      if(!tips){
+        tips = 0;
+      }
+      this.viewTotal = this.newTotal + this.tax + tips + newAmount - this.discount;
       // console.log(totalt)
       // this.total = newAmount * 1.05;
+    },
+    tip(newAmount){
+      // this.newTotal += newAmount;
+      if(!newAmount){
+        newAmount = 0;
+      }
+      this.viewTotal = this.newTotal + this.tax + newAmount + this.delivery_amount - this.discount;
     }
 
   },
 
   methods: {
 
-    getnewTotal() {
-      if (this.product) {
-        for (let product of this.products) {
-          let vat = this.product.vat
-          let service_fee = this.product.service_fee
-          this.newTotal += Number(product.totalPrice) + Number(vat) + Number(service_fee);
-          let taxAmt = (Number(this.newTotal) * Number(product.vendor.tax)) / 100;
-          this.tax += taxAmt;
-          if (product.selectedOptions) {
-            product.selectedOptions.forEach((item) => {
-              this.newTotal += Number(item.price);
-            });
-          }
-          if (product.selectedOption) {
-            this.newTotal += Number(product.selectedOption.price);
-          }
-          return this.newTotal
-        }
-        this.tax += parseFloat(this.tax).toFixed(2);
-      }
-
-    },
 
     vendorPickup() {
       this.vendor_pickup = 0
@@ -468,6 +469,9 @@ export default {
       let address_id;
       if (this.address != null) {
         address_id = this.address.id;
+      } else {
+        this.delivery_amount = this.delivery_fee = 0;
+        return;
       }
 
       this.$store.commit("loading", true);
@@ -483,15 +487,15 @@ export default {
           this.$store.commit("loading", false);
           let fee = response.data;
           this.delivery_fee = fee.delivery_fee;
+          this.delivery_amount = this.delivery_fee;
 
           if (vendor.delivery_range < this.calcCrow()) {
+            this.delivery_amount = 0;
             Swal.fire({
               icon: "error",
               title: "Oops...",
               text: "Delivery address out of reach for vendor!",
             });
-          } else {
-            this.delivery_amount = this.delivery_fee;
           }
         });
     },
@@ -512,7 +516,7 @@ export default {
         });
       } else {
 
-        let totalAmount = this.newTotal + this.delivery_amount + this.tax - (this.discount ?? 0);
+          let totalAmount = this.newTotal + this.delivery_amount + this.tax + this.tip - (this.discount ?? 0);
         let mProduct = []
         let vVendor_id, vFees;
         // let vVendor_id, vFees, vTax, vDiscount;
@@ -563,12 +567,10 @@ export default {
               fees: vFees,
               sub_total: this.newTotal,
               tax: this.tax ?? 0,
-              // tax: vTax ?? 0,
               discount: this.discount ?? 0,
-              // discount: vDiscount ?? 0,
               delivery_address_id: this.address ? this.address.id : "",
               payment_method_id: this.paymentMethod.id,
-              delivery_fee: this.delivery_fee,
+              delivery_fee: this.delivery_amount,
               total: totalAmount,
               note: this.note,
               tip: this.tip,
