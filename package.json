@@ -1,10 +1,10 @@
 {
-  "name": "ASKNC",
+  "name": "TUBO",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --base https://site.asknc.in/",
+    "build": "vue-cli-service build --base https://takebizonline.in/",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
     "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|vue)\" --locales \"./src/locales/**/*.json\""
@@ -90,5 +90,6 @@
   ],
   "jest": {
     "preset": "@vue/cli-plugin-unit-jest"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

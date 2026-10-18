@@ -11,7 +11,7 @@
       <div class="flex items-center justify-between">
         <div class="flex items-center flex-shrink-0">
           <a href="/" class="flex items-center">
-            <img v-if="settings.strings.website.websiteHeaderImage" v-bind:src="settings.strings.website.websiteHeaderImage" class="h-6 mr-3 sm:h-9" alt="ASKNC Logo" />
+            <img v-if="settings.strings.website.websiteHeaderImage" v-bind:src="settings.strings.website.websiteHeaderImage" class="h-6 mr-3 sm:h-9" alt="TUBO Logo" />
             <span class="self-center text-xl font-semibold whitespace-nowrap">{{
               settings.strings.app_name
             }}</span>

@@ -28,7 +28,7 @@ export default {
   },
 
   mounted() {
-    document.title = "ASKNC - Everything you need delivered now"
+    document.title = "Tubo - Take your business online"
   },
   computed: {
     loading() {
